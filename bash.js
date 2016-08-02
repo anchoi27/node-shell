@@ -2,20 +2,16 @@ var commands = require("./commands.js");
 
 process.stdout.write('prompt > ');
 process.stdin.on('data', function (data) {
-	var input = data.toString().trim();
-	var cmd = input.match(/[^\d\s]+/)[0];
-	//match(/[^\s]+/)
-	var file = input.substr(input.indexOf(" ") + 1);
-	// console.log(input);
-	// console.log(cmd);
-	// console.log(file);
+	var cmd = data.toString().trim();
+	var firstCommand = cmd.slice(0 ,cmd.indexOf(" "));
+	var file = cmd.substr(cmd.indexOf(" ") + 1);
 	if (cmd === "pwd") commands.pwd();
-	if (cmd === "date") commands.date();
-	if (cmd === "ls") commands.ls();
-	if (cmd === "echo") commands.echo(file);
-
-	if (cmd === "cat") commands.echo(file);
-	if (cmd === "head") commands.echo(file);
-	if (cmd === "tail") commands.echo(file);
-	//process.stdout.write('\nprompt > ');
+	else if (cmd === "date" || cmd === "date") commands.date();
+	else if (cmd === "ls") commands.ls(file);
+	else if (firstCommand === "echo") commands.echo(file);
+	else if (firstCommand === "cat") commands.cat(file);
+	else if (firstCommand === "head") commands.head(file);
+	else if (firstCommand === "tail") commands.tail(file);
+	else process.stderr.write('command not found: ' + input);
+	process.stdout.write('\nprompt > ');
 });

@@ -1,11 +1,10 @@
 var fs = require('fs');
 module.exports = {
 	pwd: function(file) {
-		console.log(process.env.PWD);
+		process.stdout.write(process.env.PWD);
 	},
 	date: function(file) {
-		var now = new Date();
-		console.log(now);
+		process.stdout.write(Date());
 	},
 	ls: function(file){
 		fs.readdir('.', function(err, files) {
@@ -13,26 +12,39 @@ module.exports = {
 			files.forEach(function(file) {
 				process.stdout.write(file.toString() + "\n");
 			});
-			process.stdout.write("prompt > ");
 		});
 	},
 	echo: function(file) {
-		console.log(file);
+		process.stdout.write(file);
 	},
 	cat: function(file) {
 		var filePath = process.env.PWD + "/" + file;
 		fs.readFile(filePath, function(err, data){
 			if (err) throw err;
-			console.log(process.env.PWD);
-			console.log(filePath);
+			process.stdout.write(data);
 		});
-	}
-	/*
+	},
 	head: function(file) {
-
+		var filePath = process.env.PWD + "/" + file;
+		fs.readFile(filePath, function(err, data){
+			if (err) throw err;
+			var dataArr = data.toString().trim();
+			var dataLines = dataArr.match(/[^\r\n]+/g);
+			for(var i = 0; i < 5; i++){
+				process.stdout.write(dataLines[i] + "\n");
+			}
+		});
 	},
 	tail: function(file) {
-
+		var filePath = process.env.PWD + "/" + file;
+		fs.readFile(filePath, function(err, data){
+			if (err) throw err;
+			var dataArr = data.toString().trim();
+			var dataLines = dataArr.match(/[^\r\n]+/g);
+			var fifthToTheLast = dataLines.length - 5;
+			for(var i = fifthToTheLast; i < dataLines.length; i++){
+				process.stdout.write("\n" + dataLines[i]);
+			}
+		});
 	}
-	*/
 };
